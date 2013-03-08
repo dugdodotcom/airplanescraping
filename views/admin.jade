@@ -1,0 +1,11 @@
+extends layout
+
+block content
+    each user in users
+        div.well
+            div.row
+                div.span2
+                    div.tumbnail
+                        img(src="#{user.gravatar}")
+                div.offset3
+                    h3= user.email

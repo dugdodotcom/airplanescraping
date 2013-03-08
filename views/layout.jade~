@@ -1,0 +1,66 @@
+
+include mixins/menu
+
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.min.css')
+    script(type="text/javascript", src='/js/jquery-1.7.2.min.js')
+    script(type="text/javascript", src='/js/bootstrap.min.js')
+    script(type="text/javascript")
+        $(".collapse").collapse();
+        $('.dropdown-toggle').dropdown();
+
+    body
+    div.navbar.navbar-fixed-top
+        div.navbar-inner
+            div.container
+                a.btn.btn-navbar(data-toggle='collapse', data-target=".nav-collapse")
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+            
+                a.brand(href='/') Express on dotCloud
+               
+                div.nav-collapse
+                    ul.nav
+                        //- Mixin is a great way to fatorise you template logic and keep them cleaner
+                        mixin menuLi({page: page, url:"/welcome", text: "Home"})
+                        mixin menuLi({page: page, url:"/who-are-you", text: "Create a session"})
+                        mixin menuLi({page: page, url:"/admin", text: "Admin"})
+                        mixin menuLi({page: page, url:"/tes", text: "TEs"})
+                        
+                    ul.nav.pull-right
+                        li.divider-vertical
+                        li.dropdown
+                            a.dropdown-toggle(href="#", data-toggle="dropdown") Documentation
+                                b.caret
+
+                            ul.dropdown-menu
+                                li
+                                    a(target="_blank", href="http://expressjs.com/api.html") Express API
+                                li
+                                    a(target="_blank", href="https://github.com/visionmedia/express/tree/master/examples") Express examples
+                                li
+                                    a(target="_blank", href="http://github.com/visionmedia/jade#readme") Jade doc
+                                li
+                                    a(target="_blank", href="https://github.com/chriso/node-validator ") Node-validator
+                                li
+                                    a(target="_blank", href="https://github.com/mranney/node_redis/#readme") Node_redis
+                                li
+                                    a(target="_blank", href="http://twitter.github.com/bootstrap") Bootstrap 
+                                li
+                                    a(target="_blank", href="http://en.gravatar.com/site/implement/images") Gravatar
+
+                                li 
+                                    a(target="_blank", href="https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/map") Array.map()
+
+                                li.divider
+                                li
+                                    a(target="_blank", href="http://nodejs.org/api/all.html#all_crypto_createhash_algorithm") Node hash
+                                li
+                                    a(target="_blank", href="http://nodejs.org/api/util.html#util_util_inspect_object_showhidden_depth_colors") Node inspect
+    div.container(style="margin-top: 100px")
+        block content

@@ -1,0 +1,16 @@
+extends layout
+
+block content
+    div.hero-unit
+        div.row
+          div.span6
+            h2 Welcome
+            p= session.email
+            
+            a.btn.btn-primary.btn-large(href="/who-are-you") Change email
+          
+          div.offset6
+            div.span3.thumbnail
+              img(src="#{session.gravatar}", width="100%")
+
+    

@@ -1,0 +1,10 @@
+//- This very simpel mixin prints the menu links
+//- and set the link active if this is the page we are on
+//- argument : {page: "", url:"", text: ""}
+mixin menuLi(o)
+    - if (o.page == o.url)
+        li.active
+            a(href=o.url)= o.text
+    - else
+        li
+            a(href=o.url)= o.text

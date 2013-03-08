@@ -1,0 +1,339 @@
+extends layout
+
+block content
+	script(type="text/javascript")
+		$(function() {
+		$("input[name='selecttrip']").click(function(){
+			var id=$(this).val();
+			if(id==1){
+				$(".row-fluid.dateback").hide();
+			}else{
+				$(".row-fluid.dateback").show();
+			}
+		})
+		
+		$( "#datepicker" ).datepicker({
+			numberOfMonths: 2,
+			showButtonPanel: true,
+			minDate: 0
+		});
+		$( "#datepicker" ).datepicker( "setDate", "+0" );
+		$( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+		$( "#datepicker2" ).datepicker({
+			numberOfMonths: 2,
+			showButtonPanel: true,
+			minDate: 0
+		});
+		$( "#datepicker2" ).datepicker( "setDate", "+0" );
+		$( "#datepicker2" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+		//form
+		$("#confirmplane").click(function(){
+
+			var types=$("input[name='selecttrip']:checked").val();
+			var fx=($("input[name='flexible']:checked").val()==1?'1':'0');
+			var depart=$('select[name="selectdepart"]').val();
+			var departname=$('select[name="selectdepart"] option:selected').text();
+			var returns=$('select[name="selectreturn"]').val();
+			var returnsname=$('select[name="selectreturn"] option:selected').text();
+			var depdate=$('input[name="depdate"]').val();
+			var retdate=$('input[name="retdate"]').val();
+			var adult=$('select[name="selectadult"]').val();
+			var children=$('select[name="selectchildren"]').val();
+			var baby=$('select[name="selectbaby"]').val();
+			
+				if(depart=='--Depart--'){
+					alert('Please select your depart location');
+					return false;
+				}else if(returns=='--Return--'){
+					alert('Please select your return location');
+					return false;
+				}
+			$(this).attr("disabled", "disabled");
+			var datastring=types+"/"+fx+"/"+depart+"/"+departname+"/"+returns+"/"+returnsname+"/"+depdate+"/"+retdate+"/"+adult+"/"+children+"/"+baby;
+			var page;
+			var page2;
+			$("#progressstatus").fadeIn(400).html('<div class="progress progress-striped active">\
+			<div class="bar" style="width: 40%;"></div>\
+			</div>');
+			$.getJSON('http://'+window.location.host+"/searchplane/"+datastring, function(data)
+			{
+			$("#progressstatus").fadeIn(400).html('<div class="progress progress-striped active">\
+			<div class="bar" style="width: 80%;"></div>\
+			</div>');
+			$.each(data.going, function(i, go)
+			{
+				page+='<tr>\
+							<td>'+go.airplane+'</td>\
+							<td>'+go.detail+'</td>\
+							<td>'+go.depart+'</td>\
+							<td>'+go.arrive+'</td>\
+							<td>'+go.promo+'</td>\
+							<td>'+go.economy+'</td>\
+							<td>'+go.business+'</td>\
+						</tr>';
+			});
+			$.each(data.back, function(i, go)
+			{
+				page2+='<tr>\
+							<td>'+go.airplane+'</td>\
+							<td>'+go.detail+'</td>\
+							<td>'+go.depart+'</td>\
+							<td>'+go.arrive+'</td>\
+							<td>'+go.promo+'</td>\
+							<td>'+go.economy+'</td>\
+							<td>'+go.business+'</td>\
+						</tr>';
+			});
+			$('#airplanelist tbody').html(page);
+			$('#airplanelist2 tbody').html(page2);
+			$("#progressstatus").fadeIn(400).html('<div class="progress progress-striped active">\
+			<div class="bar" style="width: 100%;"></div>\
+			</div>');
+			$("#progressstatus").fadeIn(400).html('Success');
+			$("#progressstatus").fadeOut(400);
+			$(this).removeAttr("disabled")
+			});
+			
+		})
+		});
+		
+	div.row-fluid
+		div.span4
+			div.well.nice1
+				div.row-fluid
+					div.span12
+						h3 Rincian Pencarian Anda
+				div.row-fluid
+					div.span6
+						label.radio Sekali Jalan
+							input(type="radio",name="selecttrip",value="1") 
+					div.span6
+						label.radio Pulang Pergi
+								input(type="radio",name="selecttrip",value="2",checked="checked") 
+				div.row-fluid
+					div.row-fluid
+						div.span12
+							form.form-horizontal
+								div.control-group
+									label.select Dari<br/>
+										select.selectfrom(name="selectdepart")
+											option(selected="selected",value="--Depart--") --Depart--
+											option(value="AMQ") Ambon (AMQ)
+											option(value="BPN") Balikpapan (BPN)
+											option(value="BTJ") Banda Aceh (BTJ)
+											option(value="TKG") Bandar Lampung (TKG)
+											option(value="BDO") Bandung (BDO)
+											option(value="BDJ") Banjarmasin (BDJ)
+											option(value="DQJ") Banyuwangi (DQJ)
+											option(value="BTH") Batam (BTH)
+											option(value="BUW") Baubau (BUW)
+											option(value="BKS") Bengkulu (BKS)
+											option(value="BEJ") Berau (BEJ)
+											option(value="BMU") Bima (BMU)
+											option(value="WUB") Buli (WUB)
+											option(value="DPS") Denpasar (Bali) (DPS)
+											option(value="ENE") Ende (ENE)
+											option(value="FKQ") Fak Fak (FKQ)
+											option(value="GTO") Gorontalo (GTO)
+											option(value="GNS") Gunung Sitoli (GNS)
+											option(value="SGN") Ho Chi Minh City (SGN)
+											option(value="CGK") Jakarta (CGK)
+											option(value="DJB") Jambi (DJB)
+											option(value="DJJ") Jayapura (DJJ)
+											option(value="JED") Jeddah (JED)
+											option(value="JOG") Jogjakarta (JOG)
+											option(value="KNG") Kaimana (KNG)
+											option(value="KDI") Kendari (KDI)
+											option(value="KBU") Kotabaru (KBU)
+											option(value="KUL") Kuala Lumpur (KLIA) (KUL)
+											option(value="KOE") Kupang (KOE)
+											option(value="LBJ") Labuan Bajo (LBJ)
+											option(value="LAH") Labuha (LAH)
+											option(value="LSW") Lhokseumawe (LSW)
+											option(value="LOP") Lombok, Mataram (LOP)
+											option(value="LUW") Luwuk (LUW)
+											option(value="MKZ") Malacca (MKZ)
+											option(value="MLG") Malang (MLG)
+											option(value="MJU") Mamuju (MJU)
+											option(value="MDC") Manado (MDC)
+											option(value="MKW") Manokwari (MKW)
+											option(value="MOF") Maumere (MOF)
+											option(value="MES") Medan (MES)
+											option(value="MNA") Melanguane (MNA)
+											option(value="MKQ") Merauke (MKQ)
+											option(value="MEQ") Meulaboh (MEQ)
+											option(value="NBX") Nabire (NBX)
+											option(value="NTX") Natuna Ranai (NTX)
+											option(value="PDG") Padang (PDG)
+											option(value="PKY") Palangkaraya (PKY)
+											option(value="PLM") Palembang (PLM)
+											option(value="PLW") Palu (PLW)
+											option(value="PGK") Pangkal Pinang (PGK)
+											option(value="PKU") Pekan Baru (PKU)
+											option(value="PEN") Penang (PEN)
+											option(value="PUM") Pomalaa (PUM)
+											option(value="PNK") Pontianak (PNK)
+											option(value="PSJ") Poso (PSJ)
+											option(value="SRG") Semarang (SRG)
+											option(value="AEG") Sibolga (AEG)
+											option(value="DTB") Silangit (DTB)
+											option(value="SIN") Singapore (SIN)
+											option(value="SOC") Solo (SOC)
+											option(value="SOQ") Sorong (SOQ)
+											option(value="SWQ") Sumbawa (SWQ)
+											option(value="SUB") Surabaya (SUB)
+											option(value="NAH") Tahuna (NAH)
+											option(value="TMC") Tambolaka (TMC)
+											option(value="TNJ") Tanjung Pinang (TNJ)
+											option(value="TRK") Tarakan (TRK)
+											option(value="TTE") Ternate (TTE)
+											option(value="KAZ") Tobelo (KAZ)
+											option(value="LUV") Tual (LUV)
+											option(value="UPG") Ujung Pandang (UPG)
+											option(value="WGP") Waingapu (WGP)
+											option(value="WNI") Wakatobi (WNI)
+					div.row-fluid
+						div.span12
+							form.form-horizontal
+								div.control-group
+									label.select Ke<br/>
+										select.selectto(name="selectreturn")
+											option(selected="selected",value="--Return--") --Return--
+											option(value="AMQ") Ambon (AMQ)
+											option(value="BPN") Balikpapan (BPN)
+											option(value="BTJ") Banda Aceh (BTJ)
+											option(value="TKG") Bandar Lampung (TKG)
+											option(value="BDO") Bandung (BDO)
+											option(value="BDJ") Banjarmasin (BDJ)
+											option(value="DQJ") Banyuwangi (DQJ)
+											option(value="BTH") Batam (BTH)
+											option(value="BUW") Baubau (BUW)
+											option(value="BKS") Bengkulu (BKS)
+											option(value="BEJ") Berau (BEJ)
+											option(value="BMU") Bima (BMU)
+											option(value="WUB") Buli (WUB)
+											option(value="DPS") Denpasar (Bali) (DPS)
+											option(value="ENE") Ende (ENE)
+											option(value="FKQ") Fak Fak (FKQ)
+											option(value="GTO") Gorontalo (GTO)
+											option(value="GNS") Gunung Sitoli (GNS)
+											option(value="SGN") Ho Chi Minh City (SGN)
+											option(value="CGK") Jakarta (CGK)
+											option(value="DJB") Jambi (DJB)
+											option(value="DJJ") Jayapura (DJJ)
+											option(value="JED") Jeddah (JED)
+											option(value="JOG") Jogjakarta (JOG)
+											option(value="KNG") Kaimana (KNG)
+											option(value="KDI") Kendari (KDI)
+											option(value="KBU") Kotabaru (KBU)
+											option(value="KUL") Kuala Lumpur (KLIA) (KUL)
+											option(value="KOE") Kupang (KOE)
+											option(value="LBJ") Labuan Bajo (LBJ)
+											option(value="LAH") Labuha (LAH)
+											option(value="LSW") Lhokseumawe (LSW)
+											option(value="LOP") Lombok, Mataram (LOP)
+											option(value="LUW") Luwuk (LUW)
+											option(value="MKZ") Malacca (MKZ)
+											option(value="MLG") Malang (MLG)
+											option(value="MJU") Mamuju (MJU)
+											option(value="MDC") Manado (MDC)
+											option(value="MKW") Manokwari (MKW)
+											option(value="MOF") Maumere (MOF)
+											option(value="MES") Medan (MES)
+											option(value="MNA") Melanguane (MNA)
+											option(value="MKQ") Merauke (MKQ)
+											option(value="MEQ") Meulaboh (MEQ)
+											option(value="NBX") Nabire (NBX)
+											option(value="NTX") Natuna Ranai (NTX)
+											option(value="PDG") Padang (PDG)
+											option(value="PKY") Palangkaraya (PKY)
+											option(value="PLM") Palembang (PLM)
+											option(value="PLW") Palu (PLW)
+											option(value="PGK") Pangkal Pinang (PGK)
+											option(value="PKU") Pekan Baru (PKU)
+											option(value="PEN") Penang (PEN)
+											option(value="PUM") Pomalaa (PUM)
+											option(value="PNK") Pontianak (PNK)
+											option(value="PSJ") Poso (PSJ)
+											option(value="SRG") Semarang (SRG)
+											option(value="AEG") Sibolga (AEG)
+											option(value="DTB") Silangit (DTB)
+											option(value="SIN") Singapore (SIN)
+											option(value="SOC") Solo (SOC)
+											option(value="SOQ") Sorong (SOQ)
+											option(value="SWQ") Sumbawa (SWQ)
+											option(value="SUB") Surabaya (SUB)
+											option(value="NAH") Tahuna (NAH)
+											option(value="TMC") Tambolaka (TMC)
+											option(value="TNJ") Tanjung Pinang (TNJ)
+											option(value="TRK") Tarakan (TRK)
+											option(value="TTE") Ternate (TTE)
+											option(value="KAZ") Tobelo (KAZ)
+											option(value="LUV") Tual (LUV)
+											option(value="UPG") Ujung Pandang (UPG)
+											option(value="WGP") Waingapu (WGP)
+											option(value="WNI") Wakatobi (WNI)
+					div.row-fluid
+						div.span12
+							label.checkbox Tanggal keberangkatan fleksibel
+								input(type="checkbox",name="flexible",value="1")
+					div.row-fluid
+						div.row-fluid
+							label.span2 Pergi
+								input#datepicker(type="text",name="depdate")
+						div.row-fluid.dateback
+							label.span2 Pulang
+								input#datepicker2(type="text",name="retdate")
+							
+					div.row-fluid
+						label.span4 Dewasa
+							select.span5(name="selectadult")
+								option(value="1") 1
+								option(value="2") 2
+								option(value="3") 3
+								option(value="4") 4
+						label.span4 Anak
+							span(style="margin-left:3px")
+								h7(style="font-size:8px") (2-12th)
+							select.span5(name="selectchildren")
+								option(value="0") 0
+								option(value="1") 1
+								option(value="2") 2
+								option(value="3") 3
+								option(value="4") 4
+						label.span4 Bayi
+							span(style="margin-left:3px")
+								h7(style="font-size:8px") (<2th)
+							select.span5(name="selectbaby")
+								option(value="0") 0
+								option(value="1") 1
+								option(value="2") 2
+								option(value="3") 3
+								option(value="4") 4
+					div.row-fluid
+						button.btn.btn-primary#confirmplane(type="button") Cari
+		div.span8
+			div.well.nice1
+				div#progressstatus
+				table.table.table-striped#airplanelist
+					thead
+						tr
+							th Flight
+							th Details
+							th Depart
+							th Arrive
+							th Promo
+							th Economy
+							th Business
+					tbody
+				table.table.table-striped#airplanelist2
+					thead
+						tr
+							th Flight
+							th Details
+							th Depart
+							th Arrive
+							th Promo
+							th Economy
+							th Business
+					tbody
